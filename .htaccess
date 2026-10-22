@@ -1,0 +1,8 @@
+# Hostinger (LiteSpeed/Apache) — demo.upscale.asia: static export of the Hotel OS demo
+DirectoryIndex index.html
+Options -Indexes
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
