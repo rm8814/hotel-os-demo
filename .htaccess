@@ -6,3 +6,14 @@ ErrorDocument 404 /404.html
 RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# The demo's own scripts and the pages keep the same file names between versions, so they must not be cached for
+# long (a CDN would keep serving an old version). Only the hashed /_next/static files are safe to cache for a week.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|txt)$">
+    Header set Cache-Control "public, max-age=300"
+  </FilesMatch>
+  <If "%{REQUEST_URI} =~ m#^/demo/#">
+    Header set Cache-Control "public, max-age=300"
+  </If>
+</IfModule>
