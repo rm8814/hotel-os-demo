@@ -336,7 +336,6 @@ housekeeping:{name:'Housekeeping',title:'Wayan Sari',ini:'WS',landing:'housekeep
 revenue:{name:'Revenue manager',title:'Daniel Hartono',ini:'DH',landing:'rates'},
 finance:{name:'Finance',title:'Rina Kusuma',ini:'RK',landing:'audit'},
 owner:{name:'Owner',title:'Pak Budiman',ini:'PB',landing:'dashboard'}};
-ROLES.superadmin = {name:'Super admin',title:'Full access',ini:'SA',landing:'dashboard'};
 ROLES.hr = {name:'HR',title:'Sari Wulandari',ini:'SW',landing:'svc'};
 ROLES.server = {name:'F&B server',title:'Putu Dewi',ini:'PD',landing:'order'};
 ROLES.nightauditor = {name:'Night auditor',title:'Dewi Lestari',ini:'DL',landing:'audit'};
@@ -379,7 +378,7 @@ revenue:[{eyebrow:'AI suggestions',value:String(this.AI.filter(a => !s.aiApplied
 finance:[{eyebrow:'Open folios',value:'5',note:'Rp 18.4 jt in-house balance',go:() => this.go('reservations')},{eyebrow:'Night audit',value:'02:00',note:'Business date is current',go:() => this.go('dashboard')},{eyebrow:'AR overdue',value:'Rp 7.2 jt',note:'2 corporate accounts',go:() => this.go('dashboard')}],
 owner:[{eyebrow:'Revenue · MTD',value:'Rp 412 jt',note:'+6.4% vs budget',go:() => this.go('dashboard')},{eyebrow:'RevPAR · MTD',value:'Rp 1,12 jt',note:'+3.1% vs last year',go:() => this.go('dashboard')},{eyebrow:'Guest score',value:'4.8',note:'1,204 reviews · +0.1',go:() => this.go('dashboard')}]};
 const focusLabel = role.name + ' focus';
-const focus = (FOCUS[s.role] || (s.role === 'nightauditor' || s.role === 'hr' ? FOCUS.finance : s.role === 'superadmin' ? FOCUS.gm : FOCUS.frontdesk)).map(f => ({...f,eyebrow:f.eyebrow}));
+const focus = (FOCUS[s.role] || (s.role === 'nightauditor' || s.role === 'hr' ? FOCUS.finance : FOCUS.frontdesk)).map(f => ({...f,eyebrow:f.eyebrow}));
 const kpis = [
 {label:'Room revenue · today',value:this.idr(rev0),vstyle:'margin-top:6px;font-family:var(--font-mono);font-size:20px;font-weight:600;white-space:nowrap',note:'+4.2% vs prior period'},
 {label:'Occupancy',value:occ0 + '%',vstyle:'margin-top:6px;font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--accent-cyan);white-space:nowrap',note:sold0.length + '/' + N + ' rooms tonight'},
@@ -533,7 +532,7 @@ notifOpen:s.notifOpen, toggleNotif:() => self.setState(x => ({notifOpen:!x.notif
 cmdOpen:s.cmdOpen, cmdQ:s.cmdQ, onCmdQ:e => self.setState({cmdQ:e.target.value,cmdIdx:0}), cmdRef:el => { self._cmdEl = el; }, openCmd:() => self.openCmd(), closeCmd:() => self.closeCmd(), cmdEmpty:cl.length === 0,
 closeRes:() => self.setState({openRes:null,soMode:'view',ed:null}),
 goCalendarFromSo:() => self.go('calendar'),
-greeting:({server:'Good morning, Putu',frontdesk:'Good morning, Ketut',gm:'Good morning, Maya',housekeeping:'Good morning, Wayan',revenue:'Good morning, Daniel',finance:'Good morning, Rina',owner:'Good morning, Pak Budiman',nightauditor:'Good evening, Dewi',superadmin:'Good morning'})[s.role] || 'Good morning',
+greeting:({server:'Good morning, Putu',frontdesk:'Good morning, Ketut',gm:'Good morning, Maya',housekeeping:'Good morning, Wayan',revenue:'Good morning, Daniel',finance:'Good morning, Rina',owner:'Good morning, Pak Budiman',nightauditor:'Good evening, Dewi'})[s.role] || 'Good morning',
 goReservations:() => self.go('reservations'), goCalendar:() => self.go('calendar'), goRates:() => self.go('rates'),
 liveAlertOn:s.alertOn && peak.p >= 85,
 liveAlertText:this.dlabel(peak.d) + ' is at ' + peak.p + '% with ' + roomsLeft + ' room' + (roomsLeft === 1 ? '' : 's') + ' left. 4 OTAs are searching these dates.',
@@ -1376,7 +1375,7 @@ get SCREEN_PERM() { return {billing:'fin.led|ad.set',events:'grp.view',users:'ad
 permRoleNames() { return ['GM','Front desk','F&B server','Housekeeping','Revenue','Finance','Night auditor','Owner','HR',...this.state.customRoles.map(c => c.name)]; }
 log(area, action, b, a, rec) { this.setState(x => ({alog:[{u:this.userName(),area,action,b:b || '',a:a || '',t:'Just now',d:0,rec:rec || '',at:this.dlabel(0) + ' ' + this.clock(),sens:/void|refund|role|rate|discount|reopen|deleted|removed|revoked/i.test(action)},...x.alog]})); }
 propEmail() { return {frontdesk:'ketut@grandsamudra.id',gm:'maya@grandsamudra.id',housekeeping:'wayan@grandsamudra.id',revenue:'daniel@grandsamudra.id',finance:'rina@grandsamudra.id'}[this.state.role]; }
-allowedPropIds() { const s = this.state, all = s.props || []; if (s.role === 'superadmin') return all.map(p => p.id); const em = this.propEmail(), u = em && s.sec && s.sec.users && s.sec.users[em], names = u ? u.props : (s.role === 'owner' ? this.PROPS : [this.PROPS[0]]), ids = all.filter(p => names.includes(p.name)).map(p => p.id); return ids.length ? ids : all.slice(0,1).map(p => p.id); }
+allowedPropIds() { const s = this.state, all = s.props || []; const em = this.propEmail(), u = em && s.sec && s.sec.users && s.sec.users[em], names = u ? u.props : (s.role === 'owner' ? this.PROPS : [this.PROPS[0]]), ids = all.filter(p => names.includes(p.name)).map(p => p.id); return ids.length ? ids : all.slice(0,1).map(p => p.id); }
 activePropId() { const a = this.allowedPropIds(), cur = this.state.activeProp || 'gsb'; return a.includes(cur) ? cur : a[0]; }
 get PROPS() { const l = (this.state && this.state.props || []).map(p => p.name); return l.length ? l : ['Grand Samudra Bali','Samudra Ubud Retreat','Samudra City Jakarta']; }
 thr(role) { const t = (this.state.thr || {})[role]; return t || ({GM:{void:0,disc:100,refund:0},Finance:{void:5000000,disc:20,refund:10000000},'Front desk':{void:500000,disc:10,refund:0},'Night auditor':{void:1000000,disc:0,refund:0}}[role] || {void:0,disc:0,refund:0}); }
@@ -1393,7 +1392,7 @@ const SEC = s.sec;
 const userMeta = m => SEC.users[m.e] || {mfa:'none',props:[this.PROPS[0]],last:'Today 08:' + String(10 + (m.n.length * 7) % 50).padStart(2,'0'),sessions:1 + (m.n.length % 3),status:'active'};
 o.usQ = s.usQ; o.onUsQ = e => self.setState({usQ:e.target.value});
 const setU = (e,p) => self.setState(x => ({sec:{...x.sec,users:{...x.sec.users,[e]:{...userMeta(x.team.find(m => m.e === e) || {n:'',e}),...p}}}}));
-const curPropName = ((s.props || []).find(p => p.id === this.activePropId()) || {}).name; o.usRows = s.team.filter(m => s.role === 'superadmin' || userMeta(m).props.includes(curPropName)).filter(m => !s.usQ || (m.n + m.e + m.r).toLowerCase().includes(s.usQ.toLowerCase())).map(m => { const u = userMeta(m), open = s.usOpen === m.e, enforced = s.sec.mfaRoles.includes(m.r), off = !!s.tmOff[m.e];
+const curPropName = ((s.props || []).find(p => p.id === this.activePropId()) || {}).name; o.usRows = s.team.filter(m => userMeta(m).props.includes(curPropName)).filter(m => !s.usQ || (m.n + m.e + m.r).toLowerCase().includes(s.usQ.toLowerCase())).map(m => { const u = userMeta(m), open = s.usOpen === m.e, enforced = s.sec.mfaRoles.includes(m.r), off = !!s.tmOff[m.e];
 return {ini:m.n.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase(),name:m.n,email:m.e,role:m.r,props:(() => { const mr = (s.memR || {})[m.e]; return mr ? Object.keys(mr).map(k => k.replace(/^(Grand |Samudra )/,'') + ': ' + mr[k]).join(' · ') : (u.props.length === this.PROPS.length ? 'All properties' : u.props.join(', ')); })(),last:'Last seen ' + u.last,sessions:u.sessions + (u.sessions === 1 ? ' session' : ' sessions'),
 mfa:u.mfa === 'none' ? (enforced ? 'Required · not set up' : 'Off') : u.mfa === 'app' ? 'Authenticator' : 'WhatsApp OTP',mfaS:'font-size:11.5px;font-weight:600;color:' + (u.mfa === 'none' ? (enforced ? 'var(--room-ooo)' : 'var(--fg-3)') : 'var(--accent-cyan)'),
 status:off ? 'Deactivated' : 'Active',stS:'font-size:11px;color:' + (off ? 'var(--room-ooo)' : 'var(--accent-cyan)'),open,toggle:() => self.setState({usOpen:open ? null : m.e}),
@@ -1462,16 +1461,16 @@ goRec:() => { const r = s.res.find(y => self.confOf(y) === x.rec); if (r) self.s
 empty:list.length === 0,count:list.length + ' of ' + all.length + ' entries',exportCsv:() => self.exportCsv('audit-log.csv',['Time','User','Area','Action','Record','Before','After'],list.map(x => [x.t,x.u,x.area,x.action,x.rec || '',x.b || '',x.a || ''])),exportPdf:() => { self.log('Audit log','Exported signed PDF extract · ' + (ranges.find(r => r[0] === s.alRange) || ranges[0])[0] + ' · ' + list.length + ' rows','','',''); self.toast('Signed PDF extract ready · SHA-256 fingerprint printed on each page'); },
 notice:'Entries are written once and cannot be edited or deleted, by anyone, including GM and UPSCALE staff. Kept for 7 years to meet PP 80/2019 and tax audit requirements. Each export carries a SHA-256 fingerprint.'};
 o.gmRecent = all.filter(x => x.sens).slice(0,5).map(x => ({t:x.t,u:x.u,action:x.action}));
-o.gmRecentOn = s.role === 'gm' || s.role === 'owner' || s.role === 'superadmin'; o.goAudit = () => self.setState({screen:'auditlog',alSens:true,alUser:'All',alArea:'All',alRange:'7 days'});
+o.gmRecentOn = s.role === 'gm' || s.role === 'owner'; o.goAudit = () => self.setState({screen:'auditlog',alSens:true,alUser:'All',alArea:'All',alRange:'7 days'});
 const unusual = all.filter(x => x.d <= 1 && ((x.area === 'Folio' && /void/i.test(x.action) && /00:|01:|02:/.test(x.t)) || (x.area === 'Rates' && !['Daniel Hartono','Maya Sutrisno'].includes(x.u))));
 o.auditUnusualN = unusual.length; o.auditUnusual = unusual.map(x => x.u + ' · ' + x.action + ' · ' + x.t).join('; ');
 return o;
 }
-permName() { const m = {frontdesk:'Front desk',gm:'GM',housekeeping:'Housekeeping',revenue:'Revenue',finance:'Finance',nightauditor:'Night auditor',owner:'Owner',hr:'HR',superadmin:'GM',server:'F&B server'}, r = this.state.role; return m[r] || (String(r).startsWith('c:') ? String(r).slice(2) : 'Front desk'); }
+permName() { const m = {frontdesk:'Front desk',gm:'GM',housekeeping:'Housekeeping',revenue:'Revenue',finance:'Finance',nightauditor:'Night auditor',owner:'Owner',hr:'HR',server:'F&B server'}, r = this.state.role; return m[r] || (String(r).startsWith('c:') ? String(r).slice(2) : 'Front desk'); }
 allowFor(name) { const b = this.ALLOW[name]; if (b) return b; const c = this.state.customRoles.find(x => x.name === name); return c ? (this.ALLOW[c.from] || []) : []; }
-can(k) { if (this.state.role === 'superadmin') return true; if (this.dunLocked() && !['res.view','fd.ci','fd.cash','fin.led','ad.set'].includes(k)) return false; const n = this.permName(), key = 'perm.' + n + '.' + k; if (key in this.state.sd) return !!this.state.sd[key]; const a = this.allowFor(n); return a.includes('*') || a.includes(k); }
+can(k) { if (this.dunLocked() && !['res.view','fd.ci','fd.cash','fin.led','ad.set'].includes(k)) return false; const n = this.permName(), key = 'perm.' + n + '.' + k; if (key in this.state.sd) return !!this.state.sd[key]; const a = this.allowFor(n); return a.includes('*') || a.includes(k); }
 screenAllowed(scr) { if (this.dunLocked() && !['billing','help','reservations','folio'].includes(scr)) return false; if (scr === 'portfolio' && this.allowedPropIds().length < 2) return false; const k = this.SCREEN_PERM[scr]; return !k || k.split('|').some(x => this.can(x)); }
-userName() { if (this.state.asName && this.state.asRole === this.state.role) return this.state.asName; return {server:'Putu Dewi',frontdesk:'Ketut Arya',gm:'Maya Sutrisno',housekeeping:'Wayan Sari',revenue:'Daniel Hartono',finance:'Rina Kusuma',nightauditor:'Dewi Lestari',owner:'Pak Budiman',hr:'Sari Wulandari',superadmin:'Super admin'}[this.state.role] || 'Staff'; }
+userName() { if (this.state.asName && this.state.asRole === this.state.role) return this.state.asName; return {server:'Putu Dewi',frontdesk:'Ketut Arya',gm:'Maya Sutrisno',housekeeping:'Wayan Sari',revenue:'Daniel Hartono',finance:'Rina Kusuma',nightauditor:'Dewi Lestari',owner:'Pak Budiman',hr:'Sari Wulandari'}[this.state.role] || 'Staff'; }
 });
 mix(class { // housekeeping
 get ATTS() { return [{id:'wayan',name:'Wayan S.',zone:'Floor 1',shift:'AM',cap:14},{id:'komang',name:'Komang A.',zone:'Floor 2',shift:'AM',cap:14},{id:'ayu',name:'Ayu K.',zone:'Floor 3',shift:'AM',cap:14},{id:'putu',name:'Putu D.',zone:'Villas',shift:'AM',cap:12}]; }
@@ -1805,7 +1804,7 @@ d.kpis = [...foc,...rest]; d.focusLabel = o.focusLabel || '';
 const open = {today:true,perf:true,guests:true,...(s.dashOpen || {})};
 const SEC = {today:['Today','Arrivals, rooms and tasks','Reservations',o.goReservations],perf:['Performance','Occupancy, revenue and channels','Rates',o.goRates],guests:['Guests','Reviews, messages and activity','Inbox',o.goInbox]};
 d.sec = {}; Object.keys(SEC).forEach(k => { d.sec[k] = {title:SEC[k][0],sub:SEC[k][1],link:SEC[k][2],go:SEC[k][3],open:!!open[k],ic:open[k] ? 'chevron-down' : 'chevron-right',toggle:() => self.setState(x => ({dashOpen:{...open,...(x.dashOpen || {}),[k]:!open[k]}}))}; });
-const R = s.role, ORD = {frontdesk:['today','guests','perf'],housekeeping:['today','guests','perf'],nightauditor:['today','perf','guests'],gm:['today','perf','guests'],superadmin:['today','perf','guests'],revenue:['perf','today','guests'],finance:['perf','today','guests'],owner:['perf','guests','today'],hr:['today','guests','perf']}[R] || ['today','perf','guests'];
+const R = s.role, ORD = {frontdesk:['today','guests','perf'],housekeeping:['today','guests','perf'],nightauditor:['today','perf','guests'],gm:['today','perf','guests'],revenue:['perf','today','guests'],finance:['perf','today','guests'],owner:['perf','guests','today'],hr:['today','guests','perf']}[R] || ['today','perf','guests'];
 d.order = {}; ORD.forEach((k,i) => { d.order[k] = 'order:' + i; });
 const arr = o.arrivals || [], tk = o.tasks || [], ac = o.activity || [];
 d.arr = arr.slice(0,5); d.arrMore = arr.length > 5; d.arrMoreLabel = 'View all ' + arr.length + ' arrivals'; d.noArr = arr.length === 0;
@@ -2036,7 +2035,7 @@ let stage = 'ok'; if (due && !sub) stage = day >= 7 ? 'locked' : day === 6 ? 'fi
 r = {day,stage,inv:due || sub || null,locked:stage === 'locked'}; }
 this._dc = [key,r]; return r;
 }
-dunLocked() { try { return this.state.role !== 'superadmin' && this.dunInfo().locked; } catch (e) { return false; } }
+dunLocked() { try { return this.dunInfo().locked; } catch (e) { return false; } }
 dunVals() {
 const s = this.state, self = this, I = this.dunInfo(), idr = n => this.idr(n), o = {dun:{on:false}};
 if (I.stage === 'ok' || I.stage === 'due' || !I.inv) return o;
@@ -2282,7 +2281,7 @@ return o;
 });
 mix(class { // helpx
 get NAVTITLE() { return {dashboard:'Dashboard',calendar:'Calendar',reservations:'Reservations',folio:'Folio',booking:'New reservation',guests:'Guest database',inbox:'Inbox',messaging:'Messaging',housekeeping:'Housekeeping',maintenance:'Maintenance',groups:'Groups and events',events:'Events',rates:'Rates',pricing:'Pricing',plans:'Rate plans',ratesetup:'Rate setup',corporate:'Corporate rates',channels:'Channel manager',reports:'Reports',cashier:'Cashier',payments:'Payments',ar:'AR ledger',ap:'AP ledger',audit:'Night audit',pos:'POS',svc:'Service charge',users:'Users',roles:'Roles',security:'Security',auditlog:'Audit log',settings:'Settings',kiosk:'Kiosk check-in',portfolio:'Portfolio',help:'Help centre',order:'POS orders',kitchen:'Kitchen and bar',menu:'Menu and stock',shift:'Shift and Z-report',pos:'POS overview'}; }
-hpRoleCode() { return {frontdesk:'fd',gm:'gm',housekeeping:'hk',revenue:'rv',finance:'fn',owner:'ow',nightauditor:'na',hr:'hr',superadmin:'*'}[this.state.role] || 'fd'; }
+hpRoleCode() { return {frontdesk:'fd',gm:'gm',housekeeping:'hk',revenue:'rv',finance:'fn',owner:'ow',nightauditor:'na',hr:'hr'}[this.state.role] || 'fd'; }
 hpVis(a) { return a.custom || this.screenAllowed(a.screen); }
 hpPath(code) { const all = this.helpAll().filter(a => this.hpVis(a) && !a.custom && (code === '*' || a.roles.includes('*') || a.roles.includes(code)) && a.area !== 'Troubleshooting'); const first = all.filter(a => a.area === 'Basics'), rest = all.filter(a => a.area !== 'Basics'); return [...first.slice(0,3),...rest,...first.slice(3)]; }
 hpStart(code) { const M = {fd:['b1','f1','f3','f4','f5','f7','f10'],gm:['b3','c1','n3','n9','s2','s4'],hk:['b1','h1','h2','h3','h4','h6'],rv:['r1','r2','r4','r5','r7','n9'],fn:['b3','n1','n2','n3','n5','n9'],ow:['b3','n9','s4','s7'],na:['b2','f2','n1','n3'],hr:['b1','n8','s3'],'*':['b3','s1','s2','s5']}; const A = this.helpAll(); return (M[code] || M.fd).map(id => A.find(a => a.id === id)).filter(a => a && this.hpVis(a)); }
@@ -3110,7 +3109,7 @@ return o;
 }
 settingsVals() {
 const s = this.state, self = this, o = {};
-const NAME = {frontdesk:'Ketut Arya',gm:'Maya Sutrisno',housekeeping:'Wayan Sari',revenue:'Daniel Hartono',finance:'Rina Kusuma',owner:'Pak Budiman',nightauditor:'Dewi Lestari',superadmin:'Super admin'}[s.role] || 'You';
+const NAME = {frontdesk:'Ketut Arya',gm:'Maya Sutrisno',housekeeping:'Wayan Sari',revenue:'Daniel Hartono',finance:'Rina Kusuma',owner:'Pak Budiman',nightauditor:'Dewi Lestari'}[s.role] || 'You';
 const types = [...new Set(this.ROOMS.map(r => r.type))], CAP = {'Deluxe King':2,'Deluxe Twin':2,'Suite':3,'Pool Villa':4};
 const idr = n => this.idr(n), fmt0 = n => Math.round(n).toLocaleString('en-US');
 const T = (k,label,def,x) => ({k,t:'text',label,def,...x}), C = (k,label,opts,def) => ({k,t:'chips',label,opts,def}), G = (k,label,desc,def) => ({k,t:'toggle',label,desc,def}), A = (k,label,def,rows) => ({k,t:'area',label,def,rows}), M = (k,label,opts,on) => ({k,t:'multi',label,opts,on}), GR = (label,cols,rows) => ({t:'grid',label,cols,rows}), BT = (label,run) => ({t:'btn',label,run});
