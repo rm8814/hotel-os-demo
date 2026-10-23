@@ -4,22 +4,22 @@ window.UPX_APPS["tablet"] = function (DCLogic, React) {
 class Component extends DCLogic {
   constructor(p) {
     super(p);
-    this.TYPES = {'Deluxe King':['101','102','103','104','105'],'Deluxe Twin':['201','202','203','204'],'Suite':['301','302','303'],'Pool Villa':['V1','V2']};
+    this.TYPES = {'Deluxe King':['101','102','103','104','105','106','107','108','109','110','111'],'Deluxe Twin':['201','202','203','204','205','206','207','208','209'],'Suite':['301','302','303'],'Pool Villa':['V1','V2']};
     this.HKC = {'Vacant Dirty':'var(--room-vacant-dirty)','Vacant Clean':'var(--room-vacant-clean)','Inspected':'var(--room-inspected)','Occupied':'var(--room-occupied)','OOO':'var(--room-ooo)'};
     this.HKW = {'Vacant Dirty':'var(--room-vacant-dirty-w)','Vacant Clean':'var(--room-vacant-clean-w)','Inspected':'var(--room-inspected-w)','Occupied':'var(--room-occupied-w)','OOO':'var(--room-ooo-w)'};
-    this.state = {theme:(() => { try { return localStorage.getItem('upx_theme') === 'light' ? 'light' : 'dark'; } catch (e) { return 'dark'; } })(),hlp:false,mode:'front', hkF:'All', pays:[{t:'07:41',g:'Hans Becker · 202',m:'Cash',a:1500000,live:true},{t:'09:12',g:'Sarah Whitfield · 102',m:'Card',a:3200000,live:true},{t:'10:05',g:'Tanaka Kenji · 103',m:'QRIS',a:850000,live:true}], csFolio:'h1', csMethod:'Cash', csAmt:'', seg:'arrivals', sel:'a1', q:'', toast:null, steps:{},
-      hk:{'101':'Vacant Clean','102':'Occupied','103':'Occupied','104':'Vacant Dirty','105':'Inspected','201':'Vacant Clean','202':'Occupied','203':'Vacant Dirty','204':'Occupied','301':'Occupied','302':'Vacant Dirty','303':'OOO','V1':'Inspected','V2':'Occupied'},
+    this.state = {theme:(() => { try { return localStorage.getItem('upx_theme') === 'light' ? 'light' : 'dark'; } catch (e) { return 'dark'; } })(),hlp:false,mode:'front', hkF:'All', pays:[{t:'07:41',g:'Hans Becker · 202',m:'Cash',a:330000,live:true},{t:'09:12',g:'Sarah Whitfield · 102',m:'Card',a:700000,live:true},{t:'10:05',g:'Tanaka Kenji · 103',m:'QRIS',a:190000,live:true}], csFolio:'h1', csMethod:'Cash', csAmt:'', seg:'arrivals', sel:'a1', q:'', toast:null, steps:{},
+      hk:{'101':'Vacant Clean','102':'Occupied','103':'Occupied','104':'Vacant Dirty','105':'Inspected','201':'Vacant Clean','202':'Occupied','203':'Vacant Dirty','204':'Occupied','301':'Occupied','302':'Vacant Dirty','303':'OOO','V1':'Inspected','V2':'Occupied','106':'Vacant Clean','107':'Occupied','108':'Occupied','109':'Vacant Clean','110':'Inspected','111':'Occupied','205':'Vacant Clean','206':'Occupied','207':'Vacant Clean','208':'Occupied','209':'Vacant Clean'},
       g:[
-        {id:'a1',kind:'arr',guest:'Wirawan Hadi',room:'101',type:'Deluxe King',ch:'Direct',eta:'13:30',n:3,rate:1450000,pre:true,paid:true,checked:false},
-        {id:'a2',kind:'arr',guest:'Dewi Lestari',room:'201',type:'Deluxe Twin',ch:'Traveloka',eta:'14:00',n:2,rate:1550000,pre:false,paid:false,checked:false},
-        {id:'a3',kind:'arr',guest:'James Okafor',room:'302',type:'Suite',ch:'Agoda',eta:'15:30',n:4,rate:2900000,pre:false,paid:false,checked:false},
-        {id:'a4',kind:'arr',guest:'Budi Santoso',room:null,type:'Deluxe Twin',ch:'Direct',eta:'16:00',n:2,rate:1550000,pre:false,paid:false,checked:false},
-        {id:'h1',kind:'in',guest:'Sarah Whitfield',room:'102',type:'Deluxe King',ch:'Booking.com',n:4,rate:1520000,bal:3200000,out:'Fri 11 Sep'},
-        {id:'h2',kind:'in',guest:'Tanaka Kenji',room:'103',type:'Deluxe King',ch:'Agoda',n:3,rate:1450000,bal:1150000,out:'Thu 10 Sep'},
-        {id:'h3',kind:'in',guest:'Hans Becker',room:'202',type:'Deluxe Twin',ch:'Direct',n:5,rate:1550000,bal:0,out:'Thu 10 Sep'},
-        {id:'h4',kind:'in',guest:'Elena Petrova',room:'301',type:'Suite',ch:'Direct',n:6,rate:2900000,bal:8400000,out:'Sat 12 Sep'},
-        {id:'h5',kind:'in',guest:'Ayumi Sato',room:'V2',type:'Pool Villa',ch:'Expedia',n:5,rate:4800000,bal:0,out:'Wed 9 Sep'},
-        {id:'d1',kind:'dep',guest:'Rahmat Hidayat',room:'204',type:'Deluxe Twin',ch:'Direct',n:1,rate:1550000,bal:0,out:'Today 12:00'}]};
+        {id:'a1',kind:'arr',guest:'Wirawan Hadi',room:'101',type:'Deluxe King',ch:'Direct',eta:'13:30',n:3,rate:320000,pre:true,paid:true,checked:false},
+        {id:'a2',kind:'arr',guest:'Dewi Lestari',room:'201',type:'Deluxe Twin',ch:'Traveloka',eta:'14:00',n:2,rate:340000,pre:false,paid:false,checked:false},
+        {id:'a3',kind:'arr',guest:'James Okafor',room:'302',type:'Suite',ch:'Agoda',eta:'15:30',n:4,rate:520000,pre:false,paid:false,checked:false},
+        {id:'a4',kind:'arr',guest:'Budi Santoso',room:null,type:'Deluxe Twin',ch:'Direct',eta:'16:00',n:2,rate:340000,pre:false,paid:false,checked:false},
+        {id:'h1',kind:'in',guest:'Sarah Whitfield',room:'102',type:'Deluxe King',ch:'Booking.com',n:4,rate:335000,bal:0,out:'Fri 11 Sep'},
+        {id:'h2',kind:'in',guest:'Tanaka Kenji',room:'103',type:'Deluxe King',ch:'Agoda',n:3,rate:320000,bal:0,out:'Thu 10 Sep'},
+        {id:'h3',kind:'in',guest:'Hans Becker',room:'202',type:'Deluxe Twin',ch:'Direct',n:5,rate:340000,bal:254100,out:'Fri 11 Sep'},
+        {id:'h4',kind:'in',guest:'Elena Petrova',room:'301',type:'Suite',ch:'Direct',n:6,rate:520000,bal:786500,out:'Sat 12 Sep'},
+        {id:'h5',kind:'in',guest:'Ayumi Sato',room:'V2',type:'Pool Villa',ch:'Expedia',n:5,rate:780000,bal:0,out:'Wed 9 Sep'},
+        {id:'d1',kind:'dep',guest:'Rahmat Hidayat',room:'204',type:'Deluxe Twin',ch:'Direct',n:1,rate:340000,bal:0,out:'Today 12:00'}]};
   }
   componentDidMount() { window.__tabletMode = m => this.setState({mode:m}); }
   componentWillUnmount() { delete window.__tabletMode; }

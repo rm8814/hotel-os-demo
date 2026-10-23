@@ -15,16 +15,16 @@ class Component extends DCLogic {
     super(p);
     this.state = {theme:(() => { try { return localStorage.getItem('upx_theme') === 'light' ? 'light' : 'dark'; } catch (e) { return 'dark'; } })(),hlp:{},
       tab:{frontdesk:'today',gm:'overview',housekeeping:'mine',revenue:'rates',finance:'cash',nightauditor:'audit',owner:'snapshot',hr:'svc'},
-      deps:[{id:'d1',g:'Sarah Whitfield · 102',amt:1500000,m:'Card hold',st:'Held',out:'Tomorrow'},{id:'d2',g:'Hans Becker · 202',amt:1000000,m:'Cash',st:'Held',out:'Today'},{id:'d3',g:'Elena Petrova · 301',amt:2000000,m:'QRIS',st:'Held',out:'Sun'},{id:'d4',g:'Ayumi Sato · V2',amt:3000000,m:'Card hold',st:'Settled · Rp 250,000 deducted',out:'Yesterday'}], svcSt:'draft', restr:{'Fri 11 Sep':{so:false,cta:true,min:2},'Sat 12 Sep':{so:false,cta:false,min:2},'Sun 13 Sep':{so:true,cta:false,min:1}},
+      deps:[{id:'d1',g:'Sarah Whitfield · 102',amt:500000,m:'Cash',st:'Held',out:'Thu 10 Sep'},{id:'d2',g:'Tanaka Kenji · 103',amt:500000,m:'Card hold',st:'Held',out:'Thu 10 Sep'},{id:'d3',g:'Hans Becker · 202',amt:500000,m:'QRIS / e-wallet',st:'Held',out:'Fri 11 Sep'},{id:'d4',g:'Ayumi Sato · V2',amt:500000,m:'Card hold',st:'Settled · Rp 250,000 deducted',out:'Yesterday'}], svcSt:'draft', restr:{'Fri 11 Sep':{so:false,cta:true,min:2},'Sat 12 Sep':{so:false,cta:false,min:2},'Sun 13 Sep':{so:true,cta:false,min:1}},
       openArr:null, toasts:{}, hkFilter:'All', aiApplied:{}, acked:{}, appr:{}, reports:[], issueRoom:'104', issueType:'Plumbing',
-      hk:{'101':'Vacant Clean','102':'Occupied','103':'Occupied','104':'Vacant Dirty','105':'Inspected','201':'Vacant Clean','202':'Occupied','203':'Vacant Dirty','204':'Occupied','301':'Occupied','302':'Vacant Dirty','303':'OOO','V1':'Inspected','V2':'Occupied'},
+      hk:{'101':'Vacant Clean','102':'Occupied','103':'Occupied','104':'Vacant Dirty','105':'Inspected','201':'Vacant Clean','202':'Occupied','203':'Vacant Dirty','204':'Occupied','301':'Occupied','302':'Vacant Dirty','303':'OOO','V1':'Inspected','V2':'Occupied','106':'Vacant Clean','107':'Occupied','108':'Occupied','109':'Vacant Clean','110':'Inspected','111':'Occupied','205':'Vacant Clean','206':'Occupied','207':'Vacant Clean','208':'Occupied','209':'Vacant Clean'},
       arr:[
         {id:'a1',guest:'Wirawan Hadi',room:'101',type:'Deluxe King',ch:'Direct',eta:'13:30',pre:false,paid:false,checked:false,steps:{}},
         {id:'a2',guest:'Dewi Lestari',room:'201',type:'Deluxe Twin',ch:'Traveloka',eta:'14:00',pre:false,paid:false,checked:false,steps:{}},
         {id:'a3',guest:'James Okafor',room:'302',type:'Suite',ch:'Agoda',eta:'15:30',pre:false,paid:false,checked:false,steps:{}},
         {id:'a4',guest:'Budi Santoso',room:null,type:'Deluxe Twin',ch:'Direct',eta:'16:00',pre:false,paid:false,checked:false,steps:{}}],
-      cash:[{id:'p1',g:'Hans Becker · 202',bal:0},{id:'p2',g:'Sarah Whitfield · 102',bal:3200000,due:true},{id:'p3',g:'Tanaka Kenji · 103',bal:1150000,due:true},{id:'p4',g:'Elena Petrova · 301',bal:8400000,due:true}],
-      cashIn:5550000, remind:{}, auditDone:false, auditOverride:false, chanFixed:false, loading:{}, offline:false, queued:{}, syncError:false, push:{}, shiftClosed:false, depOut:false, fdSeg:'arrivals', resSeg:'all', bk:{in:3,n:2,type:'Deluxe King'}, bkDone:null, offered:{}, failWhy:'Not clean', rr:{}, billOk:{}, arPaid:{}, invited:false, off:{},
+      cash:[{id:'p1',g:'Sarah Whitfield · 102',bal:0},{id:'p2',g:'Hans Becker · 202',bal:254100,due:true},{id:'p3',g:'Elena Petrova · 301',bal:786500,due:true},{id:'p4',g:'Tanaka Kenji · 103',bal:0}],
+      cashIn:330000, remind:{}, auditDone:false, auditOverride:false, chanFixed:false, loading:{}, offline:false, queued:{}, syncError:false, push:{}, shiftClosed:false, depOut:false, fdSeg:'arrivals', resSeg:'all', bk:{in:3,n:2,type:'Deluxe King'}, bkDone:null, offered:{}, failWhy:'Not clean', rr:{}, billOk:{}, arPaid:{}, invited:false, off:{},
       notes:[{t:'07:00',by:'Wayan Sari',text:'302 needs extra towels for the arrival'},{t:'06:45',by:'Night shift',text:'Room 303 AC compressor is still out'}]
     };
     this.ROLES = [
@@ -36,10 +36,10 @@ class Component extends DCLogic {
       {id:'nightauditor',oid:'1g',name:'Night auditor',who:'Dewi Lestari',ini:'DL',tabs:[['audit','Audit','moon-star'],['cash','Cash','banknote'],['folios','Folios','file-text'],['reports','Day-end','bar-chart-3']],more:[['reservations','Reservations','book-open','Arriving, in-house and departing guests']]},
       {id:'owner',oid:'1f',name:'Owner',who:'Pak Budiman',ini:'PB',tabs:[['snapshot','Snapshot','layout-dashboard'],['revenue','Revenue','bar-chart-3'],['digest','Digest','file-text'],['properties','Properties','layout-grid']],more:[['approvals','Approvals','shield-check','Pending requests, view only']]},
       {id:'hr',oid:'1h',name:'HR',who:'Sari Wulandari',ini:'SW',tabs:[['svc','Service charge','hand-coins'],['team','Team','users']]}];
-    this.TYPES = {'Deluxe King':['101','102','103','104','105'],'Deluxe Twin':['201','202','203','204'],'Suite':['301','302','303'],'Pool Villa':['V1','V2']};
+    this.TYPES = {'Deluxe King':['101','102','103','104','105','106','107','108','109','110','111'],'Deluxe Twin':['201','202','203','204','205','206','207','208','209'],'Suite':['301','302','303'],'Pool Villa':['V1','V2']};
     this.HKC = {'Vacant Dirty':'var(--room-vacant-dirty)','Vacant Clean':'var(--room-vacant-clean)','Inspected':'var(--room-inspected)','Occupied':'var(--room-occupied)','OOO':'var(--room-ooo)'};
     this.HKW = {'Vacant Dirty':'var(--room-vacant-dirty-w)','Vacant Clean':'var(--room-vacant-clean-w)','Inspected':'var(--room-inspected-w)','Occupied':'var(--room-occupied-w)','OOO':'var(--room-ooo-w)'};
-    this.OUTLOOK = [64,71,79,86,93,93,79,64,57,71,79,86,71,64];
+    this.OUTLOOK = [60,60,52,68,52,36,24,16,16,0,20,20,20,0];
     this.DOW = ['T','W','T','F','S','S','M','T','W','T','F','S','S','M'];
   }
   idr(n) { return 'Rp ' + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -48,7 +48,7 @@ class Component extends DCLogic {
   toast(role, text) { const off = this.state.offline; this.setState(s => ({toasts:{...s.toasts,[role]:off ? 'Offline. Queued: ' + text : text},queued:off ? {...s.queued,[role]:(s.queued[role] || 0) + 1} : s.queued})); setTimeout(() => this.setState(s => ({toasts:{...s.toasts,[role]:null}})), 2600); }
   setTab(role, t) { this.setState(s => ({tab:{...s.tab,[role]:t},loading:{...s.loading,[role]:true}})); setTimeout(() => this.setState(s => ({loading:{...s.loading,[role]:false}})), 380); }
   empty(icon, title, text) { return this.blk('Empty',{icon,title,text}); }
-  PUSH() { return {frontdesk:{text:'Wirawan Hadi is 10 minutes away. Room 101 is ready.',tab:'stays'},gm:{text:'Fri 11 Sep reached 93% with 1 room left.',tab:'overview'},housekeeping:{text:'Room 302 is needed by 15:30. Arrival priority.',tab:'mine'},revenue:{text:'Expedia sync is degraded. 1 rate below parity.',tab:'channels'},finance:{text:'Kemenparekraf is over its credit limit.',tab:'ar'},nightauditor:{text:'Night audit is due at 02:00. 4 arrivals are not checked in.',tab:'audit'},owner:{text:'Your weekly digest is ready.',tab:'digest'},hr:{text:'September service charge is waiting to be submitted.',tab:'svc'}}; }
+  PUSH() { return {frontdesk:{text:'Wirawan Hadi is 10 minutes away. Room 101 is ready.',tab:'stays'},gm:{text:'Fri 11 Sep is the busiest night at 68%.',tab:'overview'},housekeeping:{text:'Room 302 is needed by 15:30. Arrival priority.',tab:'mine'},revenue:{text:'Expedia sync is degraded. 1 rate below parity.',tab:'channels'},finance:{text:'Kemenparekraf is over its credit limit.',tab:'ar'},nightauditor:{text:'Night audit is due at 02:00. 4 arrivals are not checked in.',tab:'audit'},owner:{text:'Your weekly digest is ready.',tab:'digest'},hr:{text:'September service charge is waiting to be submitted.',tab:'svc'}}; }
   sendPush(roles) { const P = this.PUSH(), set = {}; (roles || Object.keys(P)).forEach(r => { set[r] = P[r]; }); this.setState(s => ({push:{...s.push,...set}})); setTimeout(() => this.setState(s => { const n = {...s.push}; Object.keys(set).forEach(r => { if (n[r] === set[r]) delete n[r]; }); return {push:n}; }), 7000); }
   roomFor(a) {
     const s = this.state; if (a.room) return a.room;
@@ -90,8 +90,8 @@ class Component extends DCLogic {
     return B;
   }
   calendarScreen(role) {
-    const days = [['Tue 8 Sep','64%','9 of 14 rooms'],['Wed 9 Sep','71%','10 of 14'],['Thu 10 Sep','79%','11 of 14'],['Fri 11 Sep','93%','13 of 14 · 1 room left'],['Sat 12 Sep','93%','13 of 14'],['Sun 13 Sep','79%','11 of 14'],['Mon 14 Sep','64%','9 of 14']];
-    return [this.bars('Occupancy · next 14 days',this.OUTLOOK,this.DOW,140),this.list('Next 7 nights',days.map(d => this.row(d[0],d[2],{right:d[1],rcolor:d[1] === '93%' ? 'var(--warning)' : ''}))),this.blk('Note',{text:'Drag-to-move and the full room calendar are on desktop and tablet.'})];
+    const days = ['Tue 8 Sep','Wed 9 Sep','Thu 10 Sep','Fri 11 Sep','Sat 12 Sep','Sun 13 Sep','Mon 14 Sep'].map((d,i) => [d,this.OUTLOOK[i] + '%',Math.round(this.OUTLOOK[i] * 25 / 100) + ' of 25 rooms' + (this.OUTLOOK[i] === Math.max(...this.OUTLOOK) ? ' · busiest night' : '')]);
+    return [this.bars('Occupancy · next 14 days',this.OUTLOOK,this.DOW,140),this.list('Next 7 nights',days.map(d => this.row(d[0],d[2],{right:d[1],rcolor:d[1] === Math.max(...this.OUTLOOK) + '%' ? 'var(--warning)' : ''}))),this.blk('Note',{text:'Drag-to-move and the full room calendar are on desktop and tablet.'})];
   }
   reservationsScreen(role) {
     const s = this.state, self = this, f = s.resSeg || 'all';
@@ -101,7 +101,7 @@ class Component extends DCLogic {
   }
   reportsScreen(role) {
     const idr = n => this.idr(n);
-    return [this.kpis([['Revenue today',idr(19670000),'+4.2% vs prior'],['Occupancy','64%','9 of 14 rooms'],['ADR',idr(2185556),'+1.8%'],['RevPAR',idr(1405000),'+3.0%']]),this.hbars('Revenue by channel · today',[['Direct',44,'Rp 8,7 jt'],['Booking.com',24,'Rp 4,7 jt'],['Agoda',14,'Rp 2,8 jt'],['Expedia',10,'Rp 2,0 jt'],['Traveloka',8,'Rp 1,5 jt']]),this.hbars('By segment · today',[['Leisure',58,'Rp 11,4 jt'],['Corporate',24,'Rp 4,7 jt'],['Group',18,'Rp 3,5 jt']],'var(--accent-violet-hi)'),this.kpis([['Pickup · 24h','+9','room-nights','var(--accent-cyan)'],['Weekend pace','+18%','vs last week','var(--accent-cyan)']]),this.blk('Note',{text:'The PDF owner pack and custom date ranges are on desktop.'})];
+    return [this.kpis([['Revenue today',idr(5790000),'+4.2% vs prior'],['Occupancy','60%','15 of 25 rooms'],['ADR',idr(386000),'+1.8%'],['RevPAR',idr(231600),'+3.0%']]),this.hbars('Revenue by channel · today',[['Direct',44,'Rp 2,5 jt'],['Booking.com',24,'Rp 1,4 jt'],['Agoda',14,'Rp 0,8 jt'],['Expedia',10,'Rp 0,6 jt'],['Traveloka',8,'Rp 0,5 jt']]),this.hbars('By segment · today',[['Leisure',58,'Rp 3,4 jt'],['Corporate',24,'Rp 1,4 jt'],['Group',18,'Rp 1,0 jt']],'var(--accent-violet-hi)'),this.kpis([['Pickup · 24h','+9','room-nights','var(--accent-cyan)'],['Weekend pace','+18%','vs last week','var(--accent-cyan)']]),this.blk('Note',{text:'The PDF owner pack and custom date ranges are on desktop.'})];
   }
   approvalsScreen(role, ids, canAct) {
     const s = this.state, self = this, B = [];
@@ -123,9 +123,9 @@ class Component extends DCLogic {
   svcScreen(role, canEdit) {
     const s = this.state, self = this, idr = n => this.idr(n), B = [];
     const approved = s.svcSt === 'approved';
-    B.push(this.hero('Service charge · Sep',idr(21400000),'Collected to date · 10% on room and F&B','var(--fg-1)'));
-    B.push(this.kpis([['Per point',idr(285000),'46 points this month'],['Status',approved ? 'Approved' : 'Draft','by GM',approved ? 'var(--accent-cyan)' : 'var(--warning)']]));
-    B.push(this.list('By department',[['Front office',8,3],['Housekeeping',14,2],['F&B service',12,3],['Engineering',4,2],['Management',3,0]].map(d => this.row(d[0],d[1] + ' staff · ' + (d[1] + d[2] * .5) + ' points',{right:idr(Math.round((d[1] + d[2] * .5) * 285000)),btns:canEdit ? [this.btn('Edit points',() => self.toast(role,d[0] + ' · points opened for editing'),'ghost','pencil')] : []}))));
+    B.push(this.hero('Service charge · Sep',idr(5557200),'Collected to date · Rp 5,039,269 for staff after OTA commission','var(--fg-1)'));
+    B.push(this.kpis([['Per point',idr(37889),'133 points in total'],['Status',approved ? 'Approved' : 'Draft','by GM',approved ? 'var(--accent-cyan)' : 'var(--warning)']]));
+    B.push(this.list('By department',[['Front office',9,26,985120],['Housekeeping',15,32,1212456],['F&B service',14,40,1515570],['Engineering',4,14,530449],['Management',4,21,795674]].map(d => this.row(d[0],d[1] + ' staff · ' + d[2] + ' points',{right:idr(d[3]),btns:canEdit ? [this.btn('Edit points',() => self.toast(role,d[0] + ' · points opened for editing'),'ghost','pencil')] : []}))));
     if (!approved) B.push(this.alert('warn','Awaiting approval','August is locked. September distribution is a draft until the GM approves it.','Submit to GM',() => { self.setState({svcSt:'approved'}); self.toast(role,'Submitted · Maya Sutrisno notified'); },'primary'));
     else B.push(this.blk('Note',{text:'Approved. Per-person statements are printable from the desktop.'}));
     return B;
@@ -155,8 +155,8 @@ class Component extends DCLogic {
     if (role === 'frontdesk') {
       if (tab === 'today') {
         B.push(this.hero('Arrivals left',String(left.length),left.length ? 'Next: ' + left[0].guest + ' · ' + left[0].eta : 'All arrivals checked in','var(--accent-cyan)'));
-        B.push(this.kpis([['In-house',String(5 + s.arr.filter(a => a.checked).length),'guests'],['Departures',s.depOut ? '0' : '1','Rahmat H. · 204'],['Unassigned',String(s.arr.filter(a => !a.room && !a.checked).length),'sold, no room'],['Occupancy','64%','tonight']]));
-        B.push(this.alert('live','Live · occupancy','Fri 11 Sep is at 93% with 1 room left. Hold walk-ins for that night.','Tell revenue manager',() => self.toast('frontdesk','Sent to Daniel Hartono')));
+        B.push(this.kpis([['In-house',String(11 + s.arr.filter(a => a.checked).length),'guests'],['Departures',s.depOut ? '0' : '1','Rahmat H. · 204'],['Unassigned',String(s.arr.filter(a => !a.room && !a.checked).length),'sold, no room'],['Occupancy','60%','tonight']]));
+        B.push(this.alert('live','Live · occupancy','Fri 11 Sep is the busiest night at 68%, and 4 guests are on the waitlist.','Tell revenue manager',() => self.toast('frontdesk','Sent to Daniel Hartono')));
         B.push(this.list('Next arrivals',left.slice(0,2).map(a => this.row(a.guest,a.type + ' · ' + a.ch,{right:a.eta,btns:[this.btn('Check in',() => { self.setState({openArr:a.id,fdSeg:'arrivals'}); self.setTab('frontdesk','stays'); },a.pre ? 'primary' : 'secondary','log-in')]}))));
         B.push(this.list('Departures today',[this.row('Rahmat H.','Room 204 · balance Rp 0 · settled',{pill:s.depOut ? 'Checked out' : 'Settled',tone:'positive',btns:s.depOut ? [] : [this.btn('Check out',() => { self.setState({depOut:true}); self.setState(x => ({hk:{...x.hk,'204':'Vacant Dirty'}})); self.toast('frontdesk','Rahmat H. checked out · room 204 sent to housekeeping'); },'primary','log-out')]})]));
       } else if (tab === 'stays') {
@@ -174,7 +174,7 @@ class Component extends DCLogic {
               row.steps = [
                 {...this.checkItem('Verify ID',st.id ? (a.pre ? 'Passport scanned online' : 'Passport scanned') : 'Scan passport or KTP',st.id,1),btn:st.id ? 'Verified' : 'Scan ID',run:setStep('id')},
                 {...this.checkItem('Assign room',a.room ? 'Room ' + a.room + (ready ? ' · ready' : ' · still being cleaned') : rm ? 'Suggested ' + rm + (ready ? ' · ready' : ' · being cleaned') : 'No room free',!!a.room,2),btn:a.room ? 'Assigned' : rm ? 'Assign ' + rm : 'None',run:() => { if (rm) self.setState(x => ({arr:x.arr.map(y => y.id === a.id ? {...y,room:rm} : y)})); }},
-                {...this.checkItem('Payment',st.pay ? (a.pre ? 'Card on file' : 'Prepayment taken') : 'Prepayment ' + idr(1550000),st.pay,3),btn:st.pay ? 'Done' : 'Take payment',run:setStep('pay')},
+                {...this.checkItem('Payment',st.pay ? (a.pre ? 'Card on file' : 'Prepayment taken') : 'Prepayment ' + idr(340000),st.pay,3),btn:st.pay ? 'Done' : 'Take payment',run:setStep('pay')},
                 {...this.checkItem('Security deposit',st.dep ? idr(500000) + ' held · cash' : 'Refundable ' + idr(500000) + ' per room',!!st.dep,4),btn:st.dep ? 'Taken' : 'Take deposit',run:() => { if (!st.dep) { setStep('dep')(); self.toast('frontdesk','Security deposit ' + idr(500000) + ' taken · cash'); } }}];
               const fin = a.room || rm;
               const rdy = fin && (s.hk[fin] === 'Vacant Clean' || s.hk[fin] === 'Inspected');
@@ -188,7 +188,7 @@ class Component extends DCLogic {
             return r; })));
         } else {
           const bk = s.bk, DW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-          const BASE = {'Deluxe King':1450000,'Deluxe Twin':1550000,'Suite':2900000,'Pool Villa':4800000}, total = BASE[bk.type] * bk.n * 1.21;
+          const BASE = {'Deluxe King':320000,'Deluxe Twin':340000,'Suite':520000,'Pool Villa':780000}, total = BASE[bk.type] * bk.n * 1.21;
           const dl = d => { const x = new Date(Date.UTC(2026,8,8 + d)); return DW[x.getUTCDay()] + ' ' + x.getUTCDate() + ' Sep'; };
           B.push(this.chips([0,1,2,3,4,5,6].map(d => ({label:d === 0 ? 'Today' : dl(d).slice(0,3) + ' ' + dl(d).split(' ')[1],pick:() => self.setState(x => ({bk:{...x.bk,in:d}})),style:this.chipStyle(bk.in === d)}))));
           B.push(this.chips([1,2,3,4,5].map(n => ({label:n + (n === 1 ? ' night' : ' nights'),pick:() => self.setState(x => ({bk:{...x.bk,n}})),style:this.chipStyle(bk.n === n)}))));
@@ -213,23 +213,23 @@ class Component extends DCLogic {
       }
     } else if (role === 'gm') {
       if (tab === 'overview') {
-        B.push(this.hero('Tonight','64% occupied','9 of 14 rooms · peak 93% on Fri 11 Sep','var(--accent-cyan)'));
-        B.push(this.kpis([['Revenue today','Rp 19,670,000','+4.2% vs prior'],['ADR','Rp 2,185,556','+1.8%'],['RevPAR','Rp 1,405,000','+3.0%'],['Guest score','4.8','1,204 reviews']]));
+        B.push(this.hero('Tonight','60% occupied','15 of 25 rooms · peak 68% on Fri 11 Sep','var(--accent-cyan)'));
+        B.push(this.kpis([['Revenue today','Rp 5,790,000','+4.2% vs prior'],['ADR','Rp 386,000','+1.8%'],['RevPAR','Rp 231,600','+3.0%'],['Guest score','4.8','1,204 reviews']]));
         const ap = s.aiApplied.king;
         B.push(this.alert('ai','AI suggestion',ap ? 'Applied. Deluxe King +12% for Fri and Sat is live on 5 channels.' : 'Deluxe King up 12% for Fri and Sat. Demand from 4 OTAs.',ap ? '' : 'Approve rate change',() => { self.setState(x => ({aiApplied:{...x.aiApplied,king:true}})); self.toast('gm','Rate change approved'); },'primary'));
         const items = [
           ['audit','Night audit due 02:00','Business date is current. ' + left.length + ' arrival' + (left.length === 1 ? '' : 's') + ' not yet checked in.','warn','Front desk'],
           ['ooo','Room 303 out of order','AC compressor. Ticket #482, overdue.','bad','Maintenance'],
           ['dirty',dirty.length + ' rooms still dirty','Cut-off for 14:00 check-in. 302 is an arrival.','warn','Housekeeping'],
-          ['ar','Kemenparekraf over credit limit','Balance exceeds limit by Rp 2,500,000.','bad','Finance']];
+          ['ar','Kemenparekraf over credit limit','Balance exceeds limit by Rp 550,000.','bad','Finance']];
         B.push(this.list('Exceptions · ' + items.filter(i => !s.acked[i[0]]).length + ' open',items.map(i => this.row(i[1],i[2],{pill:s.acked[i[0]] ? 'Assigned' : 'Open',tone:s.acked[i[0]] ? 'positive' : i[3] === 'bad' ? 'negative' : 'warning',btns:s.acked[i[0]] ? [] : [this.btn('Notify ' + i[4],() => { self.setState(x => ({acked:{...x.acked,[i[0]]:true}})); self.toast('gm',i[4] + ' notified'); },'secondary','send')]}))));
         B.push(this.bars('Occupancy · next 14 days',this.OUTLOOK,this.DOW,140));
       } else if (tab === 'approvals') {
         B.push(...this.approvalsScreen('gm',null,true));
       } else if (tab === 'today') {
-        B.push(this.kpis([['Arrivals left',String(left.length),'of ' + s.arr.length],['In-house',String(5 + s.arr.filter(a => a.checked).length),'guests'],['Departures',String((s.depOut ? 0 : 1) + (s.cash.find(c => c.id === 'p3').due ? 1 : 0)),'left today'],['Occupancy','64%','tonight']]));
-        const p3 = s.cash.find(c => c.id === 'p3');
-        B.push(this.list('Departures',[this.row('Rahmat H.','Room 204 · settled',{pill:s.depOut ? 'Checked out' : 'Settled',tone:'positive'}),this.row('Tanaka Kenji','Room 103 · balance ' + (p3.due ? idr(p3.bal) : 'Rp 0'),{pill:p3.due ? 'Balance due' : 'Checked out',tone:p3.due ? 'warning' : 'positive',btns:p3.due ? [this.btn('Approve balance and check out',() => { self.setState(x => ({cash:x.cash.map(y => y.id === 'p3' ? {...y,due:false} : y)})); self.toast('gm','Tanaka Kenji checked out · balance approved · logged'); },'primary','check')] : []})]));
+        B.push(this.kpis([['Arrivals left',String(left.length),'of ' + s.arr.length],['In-house',String(11 + s.arr.filter(a => a.checked).length),'guests'],['Departures',String((s.depOut ? 0 : 1) + (s.cash.find(c => c.id === 'p2').due ? 1 : 0)),'left today'],['Occupancy','60%','tonight']]));
+        const early = s.cash.find(c => c.id === 'p2');
+        B.push(this.list('Departures',[this.row('Rahmat H.','Room 204 · settled',{pill:s.depOut ? 'Checked out' : 'Settled',tone:'positive'}),this.row('Hans Becker','Room 202 · early departure · balance ' + (early.due ? idr(early.bal) : 'Rp 0'),{pill:early.due ? 'Balance due' : 'Checked out',tone:early.due ? 'warning' : 'positive',btns:early.due ? [this.btn('Approve balance and check out',() => { self.setState(x => ({cash:x.cash.map(y => y.id === 'p2' ? {...y,due:false} : y)})); self.toast('gm','Hans Becker checked out · balance approved · logged'); },'primary','check')] : []})]));
         B.push(this.list('Arrivals',s.arr.map(a => this.row(a.guest,a.type + ' · ' + a.ch + ' · ' + a.eta,{pill:a.checked ? 'In-house' : a.noShow ? 'No-show' : a.pre ? 'Pre-checked' : 'Arriving',tone:a.checked ? 'positive' : 'brand'}))));
         B.push(this.blk('Note',{text:'Checking guests in is on the front desk phone. You approve balances and exceptions.'}));
       }
@@ -268,14 +268,14 @@ class Component extends DCLogic {
       }
     } else if (role === 'revenue') {
       if (tab === 'rates') {
-        const RT = [['Deluxe King',1450000],['Deluxe Twin',1550000],['Suite',2900000],['Pool Villa',4800000]];
+        const RT = [['Deluxe King',320000],['Deluxe Twin',340000],['Suite',520000],['Pool Villa',780000]];
         const cur = (t,b) => Math.round(((t === 'Deluxe King' && s.aiApplied.king ? 1.12 : 1) * b * (1 + ((s.rr[t] || {}).adj || 0) / 100)) / 1000) * 1000;
         B.push(this.hero('Stop-sell tonight',String(RT.filter(r => (s.rr[r[0]] || {}).stop).length),'room types closed on all channels','var(--fg-1)'));
         B.push(this.list('Rates tonight · best available',RT.map(r => { const st = s.rr[r[0]] || {adj:0,stop:false}, set = (p) => () => { self.setState(x => ({rr:{...x.rr,[r[0]]:{...(x.rr[r[0]] || {adj:0,stop:false}),...p(x.rr[r[0]] || {adj:0,stop:false})}}})); };
           return this.row(r[0],(st.adj ? (st.adj > 0 ? '+' : '') + st.adj + '% · ' : '') + (st.stop ? 'Stop-sell on' : 'On sale'),{right:idr(cur(r[0],r[1])),rcolor:st.adj || (r[0] === 'Deluxe King' && s.aiApplied.king) ? 'var(--ai-fg)' : '',btns:[this.btn('−5%',() => { set(c => ({adj:c.adj - 5}))(); self.toast('revenue',r[0] + ' rate −5% · pushed to 8 channels'); },'secondary'),this.btn('+5%',() => { set(c => ({adj:c.adj + 5}))(); self.toast('revenue',r[0] + ' rate +5% · pushed to 8 channels'); },'secondary'),this.btn(st.stop ? 'Open sales' : 'Stop-sell',() => { set(c => ({stop:!c.stop}))(); self.toast('revenue',r[0] + (st.stop ? ' open for sale' : ' stop-sell on all channels')); },st.stop ? 'primary' : 'destructive')]}); })));
         B.push(this.blk('Note',{text:'One date or room type at a time. The rate grid, plans, seasons and bulk edits are on desktop.'}));
       } else if (tab === 'pace') {
-        B.push(this.kpis([['Pickup · 24h','+9','room-nights','var(--accent-cyan)'],['Weekend pace','+18%','vs last week','var(--accent-cyan)'],['OTB revenue','Rp 168 jt','next 14 nights'],['Group pickup','2 of 6','Mandiri retreat']]));
+        B.push(this.kpis([['Pickup · 24h','+9','room-nights','var(--accent-cyan)'],['Weekend pace','+18%','vs last week','var(--accent-cyan)'],['OTB revenue','Rp 43 jt','next 14 nights'],['Group pickup','2 of 6','Mandiri retreat']]));
         B.push(this.bars('On the books · occupancy %',this.OUTLOOK,this.DOW,140));
         B.push(this.alert('warn','Group cut-off','Bali Yoga Collective has 5 rooms held and an unsigned contract. Cut-off in 6 days.'));
       } else if (tab === 'channels') {
@@ -286,7 +286,7 @@ class Component extends DCLogic {
           return this.row(d,[r.so ? 'Stop-sell' : null,r.cta ? 'CTA' : null,r.min > 1 ? 'Min ' + r.min + 'n' : null].filter(Boolean).join(' · ') || 'Open, no restrictions',{right:r.so ? 'Closed' : 'Open',rcolor:r.so ? 'var(--room-ooo)' : 'var(--accent-cyan)',btns:[this.btn(r.so ? 'Open sales' : 'Stop-sell',tog('so',!r.so),r.so ? 'secondary' : 'destructive'),this.btn(r.cta ? 'Allow arrival' : 'Close to arrival',tog('cta',!r.cta),'secondary'),this.btn('Min ' + (r.min >= 3 ? 1 : r.min + 1) + 'n',tog('min',r.min >= 3 ? 1 : r.min + 1),'ghost')]}); })));
         B.push(this.blk('Note',{text:'Per-channel and per-plan overrides and channel mapping are desktop only.'}));
       } else if (tab === 'ai') {
-        const AI = [['king','Deluxe King · Fri, Sat','+12%','Forecast 93%. 4 OTAs searching, pace +18% vs last week.'],['suite','Suite · Fri, Sat','+8%','Two suites left. Comp set averages 9% above.'],['twin','Deluxe Twin · Tue, Wed','−6%','Two twins unsold tonight. Comp set averages 9% below.']];
+        const AI = [['king','Deluxe King · Fri, Sat','+12%','Forecast 74%. 4 OTAs searching, pace +18% vs last week.'],['suite','Suite · Fri, Sat','+8%','Two suites left. Comp set averages 9% above.'],['twin','Deluxe Twin · Tue, Wed','−6%','Two twins unsold tonight. Comp set averages 9% below.']];
         B.push(this.hero('AI suggestions',String(AI.filter(a => !s.aiApplied[a[0]]).length),'waiting for your decision','var(--ai-fg)'));
         AI.forEach(a => B.push(this.alert('ai',a[1] + ' · ' + a[2],a[3] + (s.aiApplied[a[0]] ? ' Applied.' : ''),s.aiApplied[a[0]] ? '' : 'Apply',() => { self.setState(x => ({aiApplied:{...x.aiApplied,[a[0]]:true}})); self.toast('revenue',a[1] + ' ' + a[2] + ' applied'); },'primary')));
       }
@@ -304,13 +304,14 @@ class Component extends DCLogic {
       } else if (tab === 'svc') {
         B.push(...this.svcScreen('finance',false));
       } else if (tab === 'bills') {
-        const BL = [['b1','PT Bali Linen','Linen service · INV-2291 · due 15 Sep',12400000],['b2','CV Segara Foods','F&B supplies · INV-0873 · due 18 Sep',8650000],['b3','PLN','Electricity · September · due 20 Sep',31200000]];
+        const BL = [['b1','Segar Fresh Produce','F&B · SF-9902 · due 10 Sep',3200000],['b2','CoolTech AC Service','Maintenance · CT-1187 · due 11 Sep · tax withheld Rp 18,000',900000]];
         B.push(this.hero('Bills to approve',String(BL.filter(b => !s.billOk[b[0]]).length),idr(BL.filter(b => !s.billOk[b[0]]).reduce((a,b) => a + b[3],0)) + ' awaiting approval','var(--fg-1)'));
         B.push(this.list('Supplier bills',BL.map(b => this.row(b[1],b[2],{right:idr(b[3]),pill:s.billOk[b[0]] ? 'Approved' : '',tone:'positive',btns:s.billOk[b[0]] ? [] : [this.btn('Approve',() => { self.setState(x => ({billOk:{...x.billOk,[b[0]]:true}})); self.toast('finance',b[1] + ' approved for payment · logged'); },'primary','check')]}))));
+        B.push(this.alert('warn','Overdue','Bali Linen Co. · BL-5521 · Rp 4,600,000 was due 4 Sep. It is approved; pay it from the desktop ledger.'));
         B.push(this.blk('Note',{text:'Entering a bill and the withholding tax are on desktop.'}));
       } else if (tab === 'ar') {
-        const A = [['Bank Mandiri',18400000,'0–30d','Rp 12,000,000'],['PT Telkom Indonesia',7200000,'60d+','Rp 4,000,000'],['Bali Dive Adventures',4100000,'0–30d','Rp 4,100,000'],['Kemenparekraf Events',22500000,'31–60d','Over limit']];
-        B.push(this.kpis([['City ledger',idr(52200000),'billed to accounts'],['Overdue','2','accounts','var(--room-ooo)']]));
+        const A = [['Bank Mandiri',4050000,'0–30d','37% of Rp 11,000,000'],['PT Telkom Indonesia',1580000,'60d+','Rp 880,000 past 60 days'],['Bali Dive Adventures',900000,'0–30d','41% of Rp 2,200,000'],['Kemenparekraf Events',4950000,'31–60d','113% of Rp 4,400,000, over limit']];
+        B.push(this.kpis([['City ledger',idr(11480000),'billed to accounts'],['Overdue','2','accounts','var(--room-ooo)']]));
         B.push(this.list('Accounts',A.map(a => this.row(a[0],'Oldest bucket ' + a[2] + ' · ' + a[3],{right:idr(a[1]),pill:s.remind[a[0]] || s.arPaid[a[0]] ? (s.arPaid[a[0]] ? 'Payment recorded' : 'Reminded') : '',tone:'positive',btns:s.arPaid[a[0]] ? [] : [...(s.remind[a[0]] ? [] : [this.btn('Send reminder',() => { self.setState(x => ({remind:{...x.remind,[a[0]]:true}})); self.toast('finance','Reminder queued for ' + a[0]); },'secondary','mail')]),this.btn('Record payment',() => { self.setState(x => ({arPaid:{...x.arPaid,[a[0]]:true}})); self.toast('finance','Payment recorded · ' + a[0] + ' · ' + idr(a[1])); },'primary','banknote')]}))));
       } else {
         B.push(...this.auditScreen('finance',left,dirty));
@@ -324,7 +325,7 @@ class Component extends DCLogic {
         B.push(this.hero('Open balances',idr(s.cash.filter(c => c.due).reduce((a,c) => a + c.bal,0)),s.cash.filter(c => c.due).length + ' folios to settle before the roll','var(--warning)'));
         B.push(this.list('In-house folios',s.cash.map(c => this.row(c.g,c.due ? 'Balance due · posts at audit' : 'Settled',{right:c.due ? idr(c.bal) : 'Rp 0',pill:c.due ? 'Due' : 'Settled',tone:c.due ? 'warning' : 'positive',btns:c.due ? [this.btn('Settle',() => { self.setState(x => ({cashIn:x.cashIn + c.bal,cash:x.cash.map(y => y.id === c.id ? {...y,due:false} : y)})); self.toast('nightauditor',idr(c.bal) + ' settled · ' + c.g); },'primary','banknote'),this.btn('Adjust',() => self.toast('nightauditor','Adjustment needs the reason and is logged'),'ghost','pencil')] : []}))));
       } else if (tab === 'reports') {
-        B.push(this.kpis([['Revenue today',idr(19670000),'room and extras, net of tax'],['Occupancy','64%','9 of 14 rooms'],['ADR',idr(2185556),'+1.8%'],['Cash collected',idr(s.cashIn),'drawer']]));
+        B.push(this.kpis([['Revenue today',idr(5790000),'room and extras, net of tax'],['Occupancy','60%','15 of 25 rooms'],['ADR',idr(386000),'+1.8%'],['Cash collected',idr(s.cashIn),'drawer']]));
         B.push(this.list('Day-end reports',[['Manager report','Today · by department, channel and segment'],['Cashier report','Shift 07:02 to now · by payment method'],['Trial balance','Posted today · balanced']].map(r => this.row(r[0],r[1],{btns:[this.btn('Open',() => self.toast('nightauditor','Opening ' + r[0]),'secondary','file-text'),this.btn('Share PDF',() => self.toast('nightauditor','PDF link copied'),'ghost','share-2')]}))));
       }
     } else if (role === 'hr') {
@@ -339,7 +340,7 @@ class Component extends DCLogic {
     } else {
       if (tab === 'snapshot') {
         B.push(this.hero('Revenue · month to date','Rp 412,6 jt','+6.4% vs budget · 7 days closed','var(--fg-1)'));
-        B.push(this.kpis([['Occupancy','71%','+2.0 pts vs LY','var(--accent-cyan)'],['RevPAR','Rp 1,120,000','+3.1% vs LY'],['ADR','Rp 1,578,000','+1.1%'],['Guest score','4.8','+0.1']]));
+        B.push(this.kpis([['Occupancy','72%','+2.0 pts vs LY','var(--accent-cyan)'],['RevPAR','Rp 266,400','+3.1% vs LY'],['ADR','Rp 370,000','+1.1%'],['Guest score','4.8','+0.1']]));
         B.push(this.bars('Weekly room revenue · Rp jt',[96,108,101,107],['W1','W2','W3','W4'],130));
       } else if (tab === 'revenue') {
         B.push(this.hbars('Revenue by source · MTD',[['Direct',42,'Rp 173 jt'],['Booking.com',26,'Rp 107 jt'],['Agoda',14,'Rp 58 jt'],['Expedia',10,'Rp 41 jt'],['Traveloka',8,'Rp 33 jt']]));
@@ -348,9 +349,9 @@ class Component extends DCLogic {
         const D = [['Weekly digest · 7 Sep','Revenue Rp 96 jt · Occupancy 71%'],['Weekly digest · 31 Aug','Revenue Rp 108 jt · Occupancy 76%'],['Monthly report · August','Revenue Rp 441 jt · RevPAR Rp 1,09 jt']];
         B.push(this.list('Reports',D.map(d => this.row(d[0],d[1],{btns:[this.btn('Open',() => self.toast('owner','Opening ' + d[0]),'secondary','file-text'),this.btn('Share',() => self.toast('owner','Share link copied'),'ghost','share-2')]}))));
       } else if (tab === 'properties') {
-        const P = [['Grand Samudra Bali','Seminyak · 25 rooms','71%','Rp 412,6 jt'],['Ubud Retreat','Ubud · 18 rooms','64%','Rp 288,0 jt'],['Nusa Dua Villas','Nusa Dua · 12 villas','78%','Rp 351,4 jt']];
-        B.push(this.hero('Portfolio · month to date','Rp 1,05 M','3 properties · revenue','var(--fg-1)'));
-        B.push(this.list('Properties',P.map((p,i) => this.row(p[0],p[1] + ' · occupancy ' + p[2],{right:p[3],pill:i === 0 ? 'Viewing' : '',tone:'brand',btns:i === 0 ? [] : [this.btn('Switch',() => self.toast('owner','Showing ' + p[0]),'secondary','repeat')]}))));
+        const P = [['Grand Samudra Bali','Seminyak · 25 rooms','72%','ADR Rp 370,000','RevPAR Rp 266,400'],['Samudra Ubud Retreat','Ubud · 22 rooms','71%','ADR Rp 1,560,000','RevPAR Rp 1,107,600']];
+        B.push(this.hero('Group occupancy','72%','47 rooms across 2 properties · 13 arrivals today','var(--accent-cyan)'));
+        B.push(this.list('Properties',P.map((p,i) => this.row(p[0],p[1] + ' · occupancy ' + p[2] + ' · ' + p[3],{right:p[4],pill:i === 0 ? 'Viewing' : '',tone:'brand',btns:i === 0 ? [] : [this.btn('Switch',() => self.toast('owner','Showing ' + p[0]),'secondary','repeat')]}))));
       } else if (tab === 'approvals') {
         B.push(...this.approvalsScreen('owner',null,false));
       }

@@ -1,8 +1,8 @@
 :HL["/_next/static/css/798c60c16e5d52ef.css","style"]
 :HL["/_next/static/css/3155f27977f35134.css","style"]
-:HL["/_next/static/css/0e608a9fc8a2ca01.css","style"]
+:HL["/_next/static/css/8a58ae7cff474414.css","style"]
 4:[["children",{"s":"__PAGE__","h":160}]]
 3:[["children",{"s":{"n":"page","t":"d","k":"settings","s":[]},"h":65632,"c":"$Q4"}]]
 2:[["children",{"s":{"n":"folder","t":"d","k":"configure","s":[]},"h":196704,"c":"$Q3"}]]
 1:[["children",{"s":"app","h":131168,"c":"$Q2"}]]
-0:{"b":"5Z-AeYwVRwTqrFx4_DQx-","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"ngl2Exf26jwaN1pdDWHzS","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
