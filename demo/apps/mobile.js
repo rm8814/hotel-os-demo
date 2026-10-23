@@ -138,7 +138,8 @@ class Component extends DCLogic {
     if (s.loading[role]) return [this.blk('Skel',{h:96}),this.blk('Skel',{h:150}),this.blk('Skel',{h:72}),this.blk('Skel',{h:110})];
     if (s.syncError) B.push(this.alert('bad','Sync failed','Could not reach the server. Showing data from 09:32.','Retry',() => { self.setState({syncError:false}); self.toast(role,'Reconnected. Data refreshed.'); },'secondary'));
     if (tab === 'more') return B.concat(this.moreScreen(role));
-    if (this.moreIds(role).includes(tab)) B.push(this.backChip(role));
+    // on a tablet the menu is a rail with every item, so there is no More page to go back to (the tablet shell sets __upxWide)
+    if (this.moreIds(role).includes(tab) && !(typeof window !== 'undefined' && window.__upxWide)) B.push(this.backChip(role));
     // screens that several roles open from their More menu
     if (tab === 'calendar') return B.concat(this.calendarScreen(role));
     if (tab === 'reservations') return B.concat(this.reservationsScreen(role));
@@ -381,7 +382,7 @@ class Component extends DCLogic {
       themeIcon:this.state.theme === 'light' ? 'moon' : 'sun',themeLabel:this.state.theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme',themeToggle:() => { const n = this.state.theme === 'light' ? 'dark' : 'light'; try { localStorage.setItem('upx_theme',n); document.documentElement.setAttribute('data-theme',n); } catch (e) {} this.setState({theme:n}); },phones:this.ROLES.map(r => { const tab = s.tab[r.id] || r.tabs[0][0], bar = this.tabsFor(r), td = bar.concat((r.more || []).map(m => [m[0],m[1],m[2]])).find(t => t[0] === tab) || r.tabs[0];
       return {helpOpen:!!s.hlp[r.id],helpToggle:() => self.setState(x => ({hlp:{...x.hlp,[r.id]:!x.hlp[r.id]}})),helpTips:(this.helpTips()[r.id] || this.helpTips().frontdesk).map(h => ({t:h[0],d:h[1]})),helpLink:'../desktop/help/' + encodeURI('Help centre.dc.html'),anchor:r.oid,oid:r.oid,href:'#' + r.oid,name:r.name,who:r.who,ini:r.ini,title:td[1] === 'Today' || td[1] === 'Overview' || td[1] === 'Snapshot' ? r.name : td[1],blocks:this.screen(r.id,tab),
         tabs:bar.map(t => ({label:t[1],icon:t[2],go:() => self.setTab(r.id,t[0]),style:'flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:6px 0;color:' + (t[0] === tab || (t[0] === 'more' && self.moreIds(r.id).includes(tab)) ? 'var(--accent-violet-hi)' : 'var(--fg-3)')})),
-        hasToast:!!s.toasts[r.id],toast:s.toasts[r.id] || '',offline:s.offline,offlineText:'Offline. ' + (s.queued[r.id] || 0) + ' change' + ((s.queued[r.id] || 0) === 1 ? '' : 's') + ' queued, will sync on reconnect.',hasPush:!!s.push[r.id],pushText:s.push[r.id] ? s.push[r.id].text : '',pushGo:() => { const pu = s.push[r.id]; if (pu) { self.setTab(r.id,pu.tab); self.setState(x => { const n = {...x.push}; delete n[r.id]; return {push:n}; }); } }}; })};
+        rail:bar.filter(t => t[0] !== 'more').map(t => ({label:t[1],icon:t[2],go:() => self.setTab(r.id,t[0]),active:t[0] === tab})).concat((r.more || []).map(m => ({label:m[1],icon:m[2],go:() => self.setTab(r.id,m[0]),active:m[0] === tab}))),railTitle:td[1],hasToast:!!s.toasts[r.id],toast:s.toasts[r.id] || '',offline:s.offline,offlineText:'Offline. ' + (s.queued[r.id] || 0) + ' change' + ((s.queued[r.id] || 0) === 1 ? '' : 's') + ' queued, will sync on reconnect.',hasPush:!!s.push[r.id],pushText:s.push[r.id] ? s.push[r.id].text : '',pushGo:() => { const pu = s.push[r.id]; if (pu) { self.setTab(r.id,pu.tab); self.setState(x => { const n = {...x.push}; delete n[r.id]; return {push:n}; }); } }}; })};
   }
 }
 
