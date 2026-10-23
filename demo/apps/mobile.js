@@ -24,8 +24,7 @@ class Component extends DCLogic {
       {id:'housekeeping',oid:'1c',name:'Housekeeping',who:'Wayan Sari',ini:'WS',tabs:[['mine','My rooms','sparkles'],['board','Board','layout-grid'],['issues','Report','wrench']]},
       {id:'revenue',oid:'1d',name:'Revenue manager',who:'Daniel Hartono',ini:'DH',tabs:[['rates','Rates','bar-chart-3'],['pace','Pace','trending-up'],['restr','Restrict','ban'],['channels','Channels','globe']]},
       {id:'finance',oid:'1e',name:'Finance',who:'Rina Kusuma',ini:'RK',tabs:[['cash','Cash','banknote'],['deps','Deposits','shield'],['svc','Svc charge','hand-coins'],['audit','Audit','moon-star']]},
-      {id:'owner',oid:'1f',name:'Owner',who:'Pak Budiman',ini:'PB',tabs:[['snapshot','Snapshot','layout-dashboard'],['revenue','Revenue','bar-chart-3'],['digest','Digest','file-text']]},
-      {id:'guest',oid:'1g',name:'Guest app',who:'Wirawan Hadi',ini:'WH',tabs:[['stay','Check-in','log-in'],['book','Book','calendar-days'],['key','Key','key-round']]}];
+      {id:'owner',oid:'1f',name:'Owner',who:'Pak Budiman',ini:'PB',tabs:[['snapshot','Snapshot','layout-dashboard'],['revenue','Revenue','bar-chart-3'],['digest','Digest','file-text']]}];
     this.TYPES = {'Deluxe King':['101','102','103','104','105'],'Deluxe Twin':['201','202','203','204'],'Suite':['301','302','303'],'Pool Villa':['V1','V2']};
     this.HKC = {'Vacant Dirty':'var(--room-vacant-dirty)','Vacant Clean':'var(--room-vacant-clean)','Inspected':'var(--room-inspected)','Occupied':'var(--room-occupied)','OOO':'var(--room-ooo)'};
     this.HKW = {'Vacant Dirty':'var(--room-vacant-dirty-w)','Vacant Clean':'var(--room-vacant-clean-w)','Inspected':'var(--room-inspected-w)','Occupied':'var(--room-occupied-w)','OOO':'var(--room-ooo-w)'};
