@@ -221,7 +221,7 @@ if (k === 'g') { this._g = Date.now(); return; }
 if (this._g && Date.now() - this._g < 1200) { const m = {d:'dashboard',c:'calendar',r:'reservations',h:'housekeeping',v:'rates',u:'guests',a:'audit',k:'cashier',l:'channels',p:'reports'}; this._g = 0; if (m[k]) { this.go(m[k]); return; } }
 }
 if (e.key === 'Escape' && s.shortcutsOpen) { this.setState({shortcutsOpen:false}); return; }
-if (!s.cmdOpen) { if (e.key === 'Escape') this.setState({openRes:null,roleMenu:false,notifOpen:false,soMode:'view',drawer:null,sel:[]}); return; }
+if (!s.cmdOpen) { if (e.key === 'Escape') this.setState({openRes:null,roleMenu:false,notifOpen:false,propMenu:false,soMode:'view',drawer:null,sel:[]}); return; }
 const items = this.cmdList();
 if (e.key === 'Escape') this.closeCmd();
 else if (e.key === 'ArrowDown') { e.preventDefault(); this.setState({cmdIdx:Math.min(items.length-1,s.cmdIdx+1)}); }
@@ -229,13 +229,14 @@ else if (e.key === 'ArrowUp') { e.preventDefault(); this.setState({cmdIdx:Math.m
 else if (e.key === 'Enter') { e.preventDefault(); const it = items[s.cmdIdx]; if (it) { this.closeCmd(); it.run(); } }
 };
 window.addEventListener('keydown', this._kd);
+this._pd = e => { if (this.state.propMenu && !(e.target.closest && e.target.closest('[data-propmenu]'))) this.setState({propMenu:false}); }; document.addEventListener('mousedown', this._pd);
 this._ki = setInterval(() => { const s = this.state; if (s.screen !== 'kiosk') return; const k = s.kx; if (k.step === 'lookup' && !k.scanning) return; const idle = k.idle + 1; if (k.step === 'done' ? idle >= 15 : idle >= 40) { this.kReset(); return; } this.setState({kx:{...k,idle}}); }, 1000);
 this._t = setTimeout(() => {
 this.setState(s => ({extraNotif:true,notifs:[{text:'New booking: Booking.com, Deluxe King, Fri 11 Sep, 2 nights',when:'just now',dot:'live',go:'calendar'},...s.notifs]}));
 this.toast('Live: new Booking.com booking for Fri 11 Sep', 'live');
 }, 7000);
 }
-componentWillUnmount() { window.removeEventListener('online',this._on); window.removeEventListener('offline',this._off); clearInterval(this._bi); window.removeEventListener('storage',this._se); clearInterval(this._ki); window.removeEventListener('keydown', this._kd); clearTimeout(this._t); }
+componentWillUnmount() { document.removeEventListener('mousedown',this._pd); window.removeEventListener('online',this._on); window.removeEventListener('offline',this._off); clearInterval(this._bi); window.removeEventListener('storage',this._se); clearInterval(this._ki); window.removeEventListener('keydown', this._kd); clearTimeout(this._t); }
 toast(text, kind) {
 const id = Math.random();
 this.setState(s => ({toasts:[...s.toasts,{id,text,kind}]}));
@@ -3769,7 +3770,13 @@ const CM = {Direct:0,'Booking.com':15,Agoda:17,Expedia:18,Traveloka:16};
 o.tbT = tbl(['Channel','Commission','Net on Rp 1,000,000','Payout terms'],'1.4fr 1fr 1.2fr 1.4fr',Object.keys(CM).map(k => ({open:() => {},cells:[c(k,'font-weight:600'),c(CM[k] + '%',M),c(idr(1000000 * (1 - CM[k] / 100)),M),c(k === 'Direct' ? 'Card processor fee only' : 'Monthly, net 30',D)]})));
 { const allowedIds = this.allowedPropIds(), P = s.props.filter(p => allowedIds.includes(p.id)), ap = P.find(p => p.id === this.activePropId()) || P[0], tot = k => P.reduce((a,p) => a + p[k],0), rooms = tot('rooms'), occW = Math.round(P.reduce((a,p) => a + p.occ * p.rooms,0) / rooms), adrW = Math.round(P.reduce((a,p) => a + p.adr * p.occ * p.rooms,0) / P.reduce((a,p) => a + p.occ * p.rooms,0));
 o.propName = ap.name; o.propIni = ap.name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase(); o.propSub = ap.city.split(',')[0] + ' · ' + ap.rooms + ' rooms';
-o.propCycle = () => { if (P.length < 2) { self.toast('You have access to ' + ap.name + ' only','neg'); return; } const nx = P[(P.findIndex(p => p.id === ap.id) + 1) % P.length]; self.switchProp(nx.id); };
+o.propToggle = () => { if (P.length < 2) { self.toast('You have access to ' + ap.name + ' only','neg'); return; } self.setState(x => ({propMenu:!x.propMenu})); };
+{ const c = !!s.collapsed; o.propMenu = {on:!!s.propMenu && P.length > 1,wrap:'display:flex;flex-direction:column;gap:2px;padding:4px;margin-bottom:4px;border:1px solid var(--line);background:var(--bg-elevated);border-radius:var(--r-sm)',
+items:P.map(p => ({name:p.name,ini:p.name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase(),sub:p.city.split(',')[0] + ' · ' + p.rooms + ' rooms',mark:p.id === ap.id ? '✓' : '',
+style:'display:flex;align-items:center;justify-content:' + (c ? 'center' : 'flex-start') + ';gap:9px;width:100%;padding:' + (c ? '6px 0' : '7px 8px') + ';border:none;border-radius:var(--r-sm);cursor:pointer;font-family:inherit;text-align:left;color:var(--fg-1);background:' + (p.id === ap.id ? 'var(--violet-wash)' : 'transparent'),
+iniStyle:'width:24px;height:24px;border-radius:6px;background:var(--accent-violet);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none',
+textStyle:c ? 'display:none' : 'flex:1;min-width:0;text-align:left',markStyle:c ? 'display:none' : 'font-size:13px;color:var(--accent-violet-hi);width:14px;text-align:center',
+pick:() => { self.setState({propMenu:false}); self.switchProp(p.id); }}))}; }
 o.pfKpis = [kpi('Group occupancy',occW + '%',rooms + ' rooms across ' + P.length + ' properties'),kpi('Group ADR',idr(adrW),'Room-night weighted'),kpi('Group RevPAR',idr(Math.round(adrW * occW / 100)),'ADR × occupancy'),kpi('Arrivals today',String(tot('arr')),tot('dep') + ' departures')];
 o.pfTabs = [['overview','Properties'],['central','Central reservations'],['guests','Shared guests'],['defaults','Group defaults']].map(x => ({label:x[1],pick:() => self.setState({pfTab:x[0]}),style:chip(s.pfTab === x[0])}));
 o.pfT = {overview:s.pfTab === 'overview',central:s.pfTab === 'central',guests:s.pfTab === 'guests',defaults:s.pfTab === 'defaults'};
