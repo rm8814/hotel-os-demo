@@ -7,14 +7,17 @@ RewriteEngine On
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# The demo's own logic files keep the same name between versions, so a CDN must not hold them for long. (The page also
-# asks for them with the build number in the address, which bypasses an old copy.) Only the hashed /_next/static files
-# are safe to cache for a week. LiteSpeed does not support <If>, so the files are named.
+# The demo's own logic files keep the same name between versions, but the page always asks for them with the build
+# number in the address (?v=<build>, set in app/scripts/build-targets.mjs, read in app/src/components/demo/dc.ts), and
+# Hostinger's CDN treats each ?v=... as a different file. So every build asks for a fresh copy, and each copy can be kept
+# for a year without a re-check on return visits. (A request with no ?v= would also be kept for a year: nothing in the
+# demo makes one.) The pages stay at 5 minutes, which is how a new build reaches visitors. LiteSpeed does not support
+# <If>, so the files are named.
 <IfModule mod_headers.c>
   <FilesMatch "\.(html|txt)$">
     Header set Cache-Control "public, max-age=300"
   </FilesMatch>
   <FilesMatch "^(upx-logic|mobile|tablet|booking-engine|guest-portal)\.js$">
-    Header set Cache-Control "public, max-age=300"
+    Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 </IfModule>
