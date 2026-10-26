@@ -1,0 +1,10 @@
+/* TEAM */
+Author: Aninda Wida
+Company: UPSCALE
+Legal entity: PT Skala Estat Asia
+Site: https://upscale.asia
+
+/* SITE */
+Product: UPSCALE Hotel OS
+Copyright: (c) 2026 PT Skala Estat Asia (UPSCALE). All rights reserved.
+Standards: HTML5, CSS3, React, Next.js

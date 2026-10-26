@@ -1,3 +1,4 @@
+/*! © 2026 PT Skala Estat Asia (UPSCALE). Written by Aninda Wida. All rights reserved. Proprietary and confidential. */
 window.UPX_APPS = window.UPX_APPS || {};
 window.UPX_APPS["guest-portal"] = function (DCLogic, React) {
 
